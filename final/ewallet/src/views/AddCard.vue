@@ -7,7 +7,7 @@
     </header>
 
     <main>
-      <section class="gcard">
+<!--      <section class="gcard">
         <section class="card" style="background-color: #c7c7c7">
         <div class="top">
             <img src="../assets/chip-light.svg" alt="chip">
@@ -29,34 +29,34 @@
             </div>
         </div>
         </section>
-      </section>
-
+      </section>-->
+      <card v-bind:card="card"/>
       <section class="cardform">
         <form class="submitcard" @submit.prevent="formsend" ref="form">
           <label for="cardnumber">CARD NUMBER</label>
-          <input type="text" name="cardnumber" placeholder="XXXX XXXX XXXX XXXX" class="cardnumber">
+          <input type="text" name="cardnumber" placeholder="XXXX XXXX XXXX XXXX" class="cardnumber" v-model="card.number">
           
           <label for="cardusername">CARDHOLDER NAME</label>
-          <input type="text" name="cardusername" placeholder="NAME" class="cardusername">
+          <input type="text" name="cardusername" placeholder="NAME" class="cardusername" v-model="card.holder">
 
           <div class="validity">
             <div class="valid">
               <label for="valid" class=labelvalid>VALID</label>
               <div class="validdate">
-                <input type="text" name="monthvalid" placeholder="MM" class="valid">
-                <input type="text" name="yearvalid" placeholder="YY" class="valid">
+                <input type="text" name="monthvalid" placeholder="MM" class="valid" v-model="card.validMonth">
+                <input type="text" name="yearvalid" placeholder="YY" class="valid" v-model="card.validDay">
               </div>
             </div>
 
             <div class="cvc">
               <label for="cvc" class="labelcvc">CVC</label>
               <div class="cvc2">
-                <input type="text" name="cvc" placeholder="XXX" class="valid">
+                <input type="text" name="cvc" placeholder="XXX" class="valid" v-model="card.cvc">
               </div>
             </div>
           </div>
 
-          <select name="vendor">
+          <select name="vendor" v-model="card.img">
             <option value="bitcoin">Bitcoin</option>
             <option value="ninja">Ninja</option>
             <option value="blockchain">Blockchain</option>
@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import card from "../components/card.vue"
 export default {
   data() {
     return {
@@ -81,41 +82,33 @@ export default {
         validMonth: "",
         validDay: "",
         vendor: "",
-        bgcolor: "",
-        color: "",
-        img: ""
+        bgcolor: "#8e8e8e",
+        color: "#ffffff",
+        img: "bitcoin"
       }
     }
   },
 
   methods: {
     formsend() {
-      this.card.number = this.$refs.form.cardnumber.value
-      this.card.holder = this.$refs.form.cardusername.value
-      this.card.validMonth = this.$refs.form.monthvalid.value
-      this.card.validDay = this.$refs.form.yearvalid.value
-      this.card.cvc = this.$refs.form.cvc.value
-      this.card.vendor = this.$refs.form.vendor.value
-      this.card.color = "#ffffff"
       if(this.$refs.form.vendor.value == "bitcoin") {
-        this.card.img = 'bitcoin'
         this.card.bgcolor = "#e8d843"
       }
       if(this.$refs.form.vendor.value == "ninja") {
-        this.card.img = 'ninja'
         this.card.bgcolor = "#2d2d2d"
       }
       if(this.$refs.form.vendor.value == "blockchain") {
-        this.card.img = 'blockchain'
         this.card.bgcolor = "#a06de8"
       }
       if(this.$refs.form.vendor.value == "evil") {
-        this.card.img = 'evil'
         this.card.bgcolor = "#ff5252"
       }
       this.$root.addcard(this.card)
       this.$router.push("/")
     }
+  },
+  components: {
+    card
   }
 }
 </script>
